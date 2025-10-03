@@ -94,7 +94,8 @@ class PublicationListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title_ru', 'title_en', 'title_kg',
             'authors_ru', 'authors_en', 'authors_kg', 
-            'journal', 'publication_date', 'publication_type',
+            'journal_ru', 'journal_en', 'journal_kg',
+            'publication_date', 'publication_type',
             'impact_factor', 'citations_count', 'doi', 'url',
             'research_area_name', 'research_center_name', 'is_featured'
         ]
@@ -102,21 +103,25 @@ class PublicationListSerializer(serializers.ModelSerializer):
 
 class PublicationDetailSerializer(serializers.ModelSerializer):
     """Сериализатор для детальной информации о публикации"""
-    research_area = ResearchAreaSerializer(read_only=True)
-    research_center = ResearchCenterSerializer(read_only=True)
+    research_area_name = serializers.CharField(source='research_area.title_ru', read_only=True)
+    research_center_name = serializers.CharField(source='research_center.name_ru', read_only=True)
     
     class Meta:
         model = Publication
         fields = [
             'id', 'title_ru', 'title_en', 'title_kg',
             'authors_ru', 'authors_en', 'authors_kg', 
-            'journal', 'publication_date', 'publication_type',
+            'journal_ru', 'journal_en', 'journal_kg',
+            'publication_date', 'publication_type',
             'impact_factor', 'citations_count', 'doi', 'url',
             'abstract_ru', 'abstract_en', 'abstract_kg',
             'keywords_ru', 'keywords_en', 'keywords_kg',
-            'research_area', 'research_center', 'file',
-            'is_featured', 'created_at'
+            'research_area', 'research_center', 
+            'research_area_name', 'research_center_name',
+            'file', 'is_featured', 'created_at'
         ]
+
+
 
 
 class GrantApplicationCreateSerializer(serializers.ModelSerializer):

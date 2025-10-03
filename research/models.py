@@ -209,7 +209,11 @@ class Publication(models.Model):
     authors_ru = models.CharField("Авторы (рус)", max_length=500)
     authors_en = models.CharField("Авторы (англ)", max_length=500)
     authors_kg = models.CharField("Авторы (кыр)", max_length=500)
-    journal = models.CharField("Журнал/Издательство", max_length=300)
+    
+    journal_ru = models.CharField("Журнал/Издательство (рус)", max_length=300, default='')
+    journal_en = models.CharField("Журнал/Издательство (англ)", max_length=300, default='')
+    journal_kg = models.CharField("Журнал/Издательство (кыр)", max_length=300, default='') 
+
     
     publication_date = models.DateField("Дата публикации")
     publication_type = models.CharField("Тип публикации", max_length=20, choices=PUBLICATION_TYPE_CHOICES, default='article')
@@ -228,8 +232,12 @@ class Publication(models.Model):
     keywords_en = models.JSONField("Ключевые слова (англ)", default=list)
     keywords_kg = models.JSONField("Ключевые слова (кыр)", default=list)
     
-    research_area = models.ForeignKey(ResearchArea, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Область исследований")
-    research_center = models.ForeignKey(ResearchCenter, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Исследовательский центр")
+    research_area = models.ForeignKey(
+        ResearchArea, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Область исследований"
+    )
+    research_center = models.ForeignKey(
+        ResearchCenter, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Исследовательский центр"
+    )
     
     file = models.FileField("Файл", upload_to='research/publications/', blank=True)
     

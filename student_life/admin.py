@@ -8,7 +8,8 @@ from .models import (
     AcademicRegulation, AcademicRegulationSection, AcademicRegulationRule,
     DownloadableDocument,
     StudentGuide, GuideRequirement, GuideStep, GuideStepDetail,
-    StudentAppeal, PhotoAlbum, Photo, VideoContent, StudentLifeStatistic
+    StudentAppeal, PhotoAlbum, Photo, VideoContent, StudentLifeStatistic,
+    EResourceCategory, EResource, EResourceFeature
 )
 
 
@@ -327,32 +328,6 @@ class GuideStepInline(admin.StackedInline):
     fields = ['title_ru', 'order']
 
 
-@admin.register(StudentGuide)
-class StudentGuideAdmin(admin.ModelAdmin):
-    list_display = ['title_ru', 'order', 'is_active']
-    list_filter = ['is_active']
-    search_fields = ['title_ru', 'title_kg', 'title_en']
-    inlines = [GuideRequirementInline, GuideStepInline]
-    ordering = ['order']
-    
-    fieldsets = (
-        ('Основная информация', {
-            'fields': ['order', 'is_active']
-        }),
-        ('Русский', {
-            'fields': ['title_ru', 'description_ru'],
-        }),
-        ('Кыргызский', {
-            'fields': ['title_kg', 'description_kg'],
-            'classes': ['collapse']
-        }),
-        ('Английский', {
-            'fields': ['title_en', 'description_en'],
-            'classes': ['collapse']
-        }),
-    )
-
-
 @admin.register(GuideStep)
 class GuideStepAdmin(admin.ModelAdmin):
     list_display = ['guide', 'order', 'title_ru']
@@ -360,6 +335,45 @@ class GuideStepAdmin(admin.ModelAdmin):
     inlines = [GuideStepDetailInline]
     ordering = ['guide', 'order']
 
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ['guide', 'step_number', 'order']
+        }),
+        ('Русский', {
+            'fields': ['title_ru', 'description_ru', 'timeframe_ru'],
+        }),
+        ('Кыргызский', {
+            'fields': ['title_kg', 'description_kg', 'timeframe_kg'],
+            'classes': ['collapse']
+        }),
+        ('Английский', {
+            'fields': ['title_en', 'description_en', 'timeframe_en'],
+            'classes': ['collapse']
+        }),
+    )
+
+@admin.register(StudentGuide)
+class StudentGuideAdmin(admin.ModelAdmin):
+    list_display = ['title_ru', 'title_kg', 'title_en', 'category', 'is_active']
+    search_fields = ['title_ru', 'title_kg', 'title_en']
+    list_filter = ['category', 'is_active']
+
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ['category', 'icon', 'order', 'is_active']
+        }),
+        ('Русский', {
+            'fields': ['title_ru', 'description_ru', 'estimated_time_ru', 'max_duration_ru', 'contact_info_ru'],
+        }),
+        ('Кыргызский', {
+            'fields': ['title_kg', 'description_kg', 'estimated_time_kg', 'max_duration_kg', 'contact_info_kg'],
+            'classes': ['collapse']
+        }),
+        ('Английский', {
+            'fields': ['title_en', 'description_en', 'estimated_time_en', 'max_duration_en', 'contact_info_en'],
+            'classes': ['collapse']
+        }),
+    )
 
 # =============================================================================
 # ADMIN ДЛЯ ОБРАЩЕНИЙ
@@ -501,6 +515,71 @@ class StudentLifeStatisticAdmin(admin.ModelAdmin):
         }),
         ('Английский', {
             'fields': ['label_en', 'description_en'],
+            'classes': ['collapse']
+        }),
+    )
+
+
+# =============================================================================
+# ADMIN ДЛЯ ЭЛЕКТРОННЫХ РЕСУРСОВ
+# =============================================================================
+
+@admin.register(EResourceCategory)
+class EResourceCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name_ru', 'icon', 'color', 'count', 'order', 'is_active']
+    list_filter = ['is_active']
+    search_fields = ['name_ru', 'name_kg', 'name_en']
+    ordering = ['order', 'name_ru']
+    
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ['icon', 'color', 'order', 'is_active']
+        }),
+        ('Русский', {
+            'fields': ['name_ru'],
+        }),
+        ('Кыргызский', {
+            'fields': ['name_kg'],
+            'classes': ['collapse']
+        }),
+        ('Английский', {
+            'fields': ['name_en'],
+            'classes': ['collapse']
+        }),
+    )
+    
+    def count(self, obj):
+        return obj.count
+    count.short_description = 'Количество ресурсов'
+
+
+class EResourceFeatureInline(admin.TabularInline):
+    model = EResourceFeature
+    extra = 1
+    fields = ['text_ru', 'text_kg', 'text_en', 'order']
+
+
+@admin.register(EResource)
+class EResourceAdmin(admin.ModelAdmin):
+    list_display = ['title_ru', 'category', 'status', 'users_count', 'is_popular', 'is_active', 'order']
+    list_filter = ['category', 'status', 'is_popular', 'is_active']
+    search_fields = ['title_ru', 'title_kg', 'title_en', 'description_ru']
+    ordering = ['order', 'title_ru']
+    inlines = [EResourceFeatureInline]
+    
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ['category', 'icon', 'color', 'url', 'users_count', 'status', 'is_popular', 'is_active', 'order']
+        }),
+        ('Русский', {
+            'fields': ['title_ru', 'description_ru'],
+        }),
+        ('Кыргызский', {
+            'fields': ['title_kg', 'description_kg'],
+            'classes': ['collapse']
+        }),
+        ('Английский', {
+            'fields': ['title_en', 'description_en'],
             'classes': ['collapse']
         }),
     )

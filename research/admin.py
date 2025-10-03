@@ -137,20 +137,20 @@ class ConferenceAdmin(admin.ModelAdmin):
 
 @admin.register(Publication)
 class PublicationAdmin(admin.ModelAdmin):
-    list_display = ['title_ru', 'authors_ru', 'journal', 'publication_date', 'publication_type', 'impact_factor', 'citations_count', 'is_featured']
+    list_display = ['title_ru', 'authors_ru', 'journal_ru', 'publication_date', 'publication_type', 'impact_factor', 'citations_count', 'is_featured']
     list_filter = ['publication_type', 'publication_date', 'is_featured', 'is_active', 'research_area']
-    search_fields = ['title_ru', 'title_en', 'title_kg', 'authors_ru', 'authors_en', 'authors_kg', 'journal']
+    search_fields = ['title_ru', 'title_en', 'title_kg', 'authors_ru', 'authors_en', 'authors_kg', 'journal_ru', 'journal_en', 'journal_kg']
     list_editable = ['is_featured', 'citations_count']
     date_hierarchy = 'publication_date'
     ordering = ['-publication_date']
     raw_id_fields = ['research_area', 'research_center']
-    
+
     fieldsets = (
         ('Основная информация', {
             'fields': ('title_ru', 'title_en', 'title_kg', 'authors_ru', 'authors_en', 'authors_kg', 'publication_type')
         }),
         ('Публикация', {
-            'fields': ('journal', 'publication_date', 'doi', 'url')
+            'fields': ('journal_ru', 'journal_en', 'journal_kg', 'publication_date', 'doi', 'url')
         }),
         ('Метрики', {
             'fields': ('impact_factor', 'citations_count')
