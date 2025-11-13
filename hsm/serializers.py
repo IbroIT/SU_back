@@ -268,7 +268,7 @@ class ProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        fields = 'name, description, profession, duration, id'
+        fields = ['name', 'description', 'profession', 'duration', 'id']
 
     def get_name(self, obj):
         lang= self.context.get('lang')
