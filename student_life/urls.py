@@ -3,10 +3,11 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     PartnerOrganizationViewSet, StudentAppealViewSet,
     PhotoAlbumViewSet, PhotoViewSet, VideoContentViewSet, StudentLifeStatisticViewSet,
-    EResourceCategoryViewSet, EResourceViewSet,
+    EResourceCategoryViewSet, EResourceViewSet,PhotoListView,
     internships_data, academic_mobility_data, regulations_data, instructions_data,
     gallery_data, life_overview_data, download_file
 )
+from . import views
 
 router = DefaultRouter()
 router.register(r'partner-organizations', PartnerOrganizationViewSet)
@@ -15,11 +16,10 @@ router.register(r'photo-albums', PhotoAlbumViewSet)
 router.register(r'photos', PhotoViewSet)
 router.register(r'videos', VideoContentViewSet)
 router.register(r'statistics', StudentLifeStatisticViewSet)
-router.register(r'e-resource-categories', EResourceCategoryViewSet)
-router.register(r'e-resources', EResourceViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('instruction-files/', views.InstructionFilesListView.as_view(), name='instruction-files-list'),
     # Комбинированные endpoints для фронтенда
     path('api/data/internships_data/', internships_data, name='internships_data'),
     path('api/data/academic_mobility_data/', academic_mobility_data, name='academic_mobility_data'),
@@ -30,4 +30,5 @@ urlpatterns = [
     path('api/data/life_overview_data/', life_overview_data, name='life_overview_data'),
     # Endpoint для скачивания файлов
     path('api/download/<int:file_id>/', download_file, name='download_file'),
+    path('api/photos/', PhotoListView.as_view(), name='photo_list'),
 ]

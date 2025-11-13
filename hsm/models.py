@@ -449,3 +449,101 @@ class Accreditation(models.Model):
         return True
 
 
+class Program(models.Model):
+    name_ru = models.CharField(max_length=200, verbose_name="Название программы(ru)")
+    name_kg = models.CharField(max_length=200, verbose_name="Название программы(kg)")
+    name_en = models.CharField(max_length=200, verbose_name="Название программы(en)")
+    description_ru = models.TextField(verbose_name="Описание программы(ru)")
+    description_kg = models.TextField(verbose_name="Описание программы(kg)")        
+    description_en = models.TextField(verbose_name="Описание программы(en)")
+    profession_ru = models.CharField(max_length=200, verbose_name="Профессия(ru)")
+    profession_kg = models.CharField(max_length=200, verbose_name="Профессия(kg)")
+    profession_en = models.CharField(max_length=200, verbose_name="Профессия(en)")
+    duration_ru = models.CharField(max_length=100, verbose_name="Продолжительность(ru)")
+    duration_kg = models.CharField(max_length=100, verbose_name="Продолжительность  (kg)")
+    duration_en = models.CharField(max_length=100, verbose_name="Продолжительность (en)")
+    review_ru = models.TextField(verbose_name="Обзор Программы(ru)", blank=True)
+    review_kg = models.TextField(verbose_name="Обзор Программы(kg)", blank=True)
+    review_en = models.TextField(verbose_name="Обзор Программы(en)", blank=True)
+
+    is_active = models.BooleanField(default=True, verbose_name="Активна")
+
+    class Meta:
+        verbose_name = "Программа"
+        verbose_name_plural = "Программы"
+
+    def __str__(self):
+        return self.name_ru
+
+    def get_requirements(self, lang='ru'):
+        return getattr(self, f'requirements_{lang}', self.requirements_ru)
+
+    def get_name(self, lang='ru'):
+        return getattr(self, f'name_{lang}', self.name_ru)
+    def get_description(self, lang='ru'):
+        return getattr(self, f'description_{lang}', self.description_ru)
+    def get_profession(self, lang='ru'):
+        return getattr(self, f'profession_{lang}', self.profession_ru)
+    def get_duration(self, lang='ru'):
+        return getattr(self, f'duration_{lang}', self.duration_ru)
+    
+class AsNumbers(models.Model):
+    intTitle = models.CharField(max_length=200, verbose_name="Заголовок-цифра")
+    title_ru = models.CharField(max_length=200, verbose_name="Заголовок(ru)")
+    title_kg = models.CharField(max_length=200, verbose_name="Заголовок(kg)")
+    title_en = models.CharField(max_length=200, verbose_name="Заголовок(en)")
+    description_ru = models.TextField(verbose_name="Описание(ru)")
+    description_kg = models.TextField(verbose_name="Описание(kg)")        
+    description_en = models.TextField(verbose_name="Описание(en)")
+
+    class Meta:
+        verbose_name = "ППС в цифрах"
+        verbose_name_plural = "ППС в цифрах"
+
+    def __str__(self):
+        return self.intTitle + " - " + self.title_ru
+    def get_title(self, lang='ru'):
+        return getattr(self, f'title_{lang}', self.title_ru)
+    def get_description(self, lang='ru'):
+        return getattr(self, f'description_{lang}', self.description_ru)
+    
+class DetailStatistics(models.Model):
+    intTitle = models.CharField(max_length=200, verbose_name="Заголовок-цифра")
+    description_ru = models.TextField(verbose_name="Описание(ru)")
+    description_kg = models.TextField(verbose_name="Описание(kg)")         
+    description_en = models.TextField(verbose_name="Описание(en)")
+
+    class Meta:
+        verbose_name = "Подробная статистика"
+        verbose_name_plural = "Подробная статистика"
+    
+    def __str__(self):
+        return self.intTitle + " - " + self.description_ru
+    def get_description(self, lang='ru'):
+        return getattr(self, f'description_{lang}', self.description_ru)
+    
+
+class Resource(models.Model):
+    name_ru = models.CharField(max_length=150, verbose_name='название ресурса(ru)')
+    name_en = models.CharField(max_length=150, verbose_name='название ресурса(en)')
+    name_kg = models.CharField(max_length=150, verbose_name='название ресурса(kg)')
+    description_ru = models.CharField(max_length=255, verbose_name='описание ресурса(ru)')
+    description_kg = models.CharField(max_length=255, verbose_name='описание ресурса(kg)')
+    description_en = models.CharField(max_length=255, verbose_name='описание ресурса(en)')
+    features_ru = models.JSONField(max_length=500, verbose_name='особенности ресурса(ru)')
+    features_kg = models.JSONField(max_length=500, verbose_name='особенности ресурса(kg)')
+    features_en = models.JSONField(max_length=500, verbose_name='особенности ресурса(en)')
+    links = models.JSONField(verbose_name='ссылка на ресурс')
+
+    class Meta:
+        verbose_name = "Ресурс"
+        verbose_name_plural = "Ресурсы"
+    
+    def __str__(self):
+        return self.name_ru
+    def get_name(self, lang='ru'):
+        return getattr(self, f'name_{lang}', self.name_ru)
+    def get_description(self, lang='ru'):
+        return getattr(self, f'description_{lang}', self.description_ru)
+    def get_features(self, lang='ru'):
+        return getattr(self, f'features_{lang}', self.features_ru)

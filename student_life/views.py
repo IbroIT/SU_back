@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status, filters
+from rest_framework import viewsets, status, filters, generics
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -14,16 +14,21 @@ from .models import (
     PartnerOrganization, StudentAppeal, PhotoAlbum, Photo, 
     VideoContent, StudentLifeStatistic, InternshipRequirement, ReportTemplate,
     StudentGuide, GuideRequirement, GuideStep, GuideStepDetail,
-    EResourceCategory, EResource, EResourceFeature
+    EResourceCategory, EResource, EResourceFeature, Photo
 )
 from .serializers import (
     PartnerOrganizationSerializer, StudentAppealSerializer,
     PhotoAlbumSerializer, PhotoSerializer, VideoContentSerializer,
     StudentLifeStatisticSerializer, InternshipRequirementSerializer,
     ReportTemplateSerializer, StudentGuideSerializer,
-    EResourceCategorySerializer, EResourceSerializer
+    EResourceCategorySerializer, EResourceSerializer, PhotoSerializer
 )
 
+
+
+class PhotoListView(generics.ListAPIView):
+    serializer_class = PhotoSerializer
+    queryset= Photo.objects.all()
 
 class PartnerOrganizationViewSet(viewsets.ModelViewSet):
     queryset = PartnerOrganization.objects.filter(is_active=True)
@@ -54,7 +59,7 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
 
 class PhotoViewSet(viewsets.ModelViewSet):
     """ViewSet для фотографий"""
-    queryset = Photo.objects.filter(is_active=True)
+    queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     permission_classes = [AllowAny]
 
@@ -827,3 +832,15 @@ class EResourceViewSet(viewsets.ReadOnlyModelViewSet):
         }
         
         return Response(stats)
+
+from .models import InstructionFiles
+from .serializers import InstructionFilesSerializer
+
+class InstructionFilesListView(generics.ListAPIView):
+    queryset = InstructionFiles.objects.all()
+    serializer_class = InstructionFilesSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context

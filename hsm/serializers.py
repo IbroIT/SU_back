@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from .models import (
-    Faculty, Accreditation, Leadership,
+    AsNumbers, DetailStatistics, Faculty, Accreditation, Leadership,
     QualityPrinciple, QualityDocument, QualityProcessGroup, 
-    QualityProcess, QualityStatistic, QualityAdvantage, QualitySettings
+    QualityProcess, QualityStatistic, QualityAdvantage, QualitySettings, Program, Resource
 )
 
 
@@ -234,3 +234,106 @@ class AccreditationSerializer(serializers.ModelSerializer):
                 return request.build_absolute_uri(obj.organization_logo.url)
             return obj.organization_logo.url
         return None
+
+class ProgramDetailSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    duration = serializers.SerializerMethodField()
+    review = serializers.SerializerMethodField()
+    profession = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Program
+        fields = '__all__'
+
+    def get_name(self, obj):
+        lang= self.context.get('lang')
+        return getattr(obj, f'name_{lang}', obj.name)
+
+    def get_duration(self, obj):
+        lang= self.context.get('lang')
+        return getattr(obj, f'duration_{lang}', obj.duration)
+    def get_review(self, obj):
+        lang= self.context.get('lang')
+        return getattr(obj, f'review_{lang}', obj.review)
+    def get_profession(self, obj):
+        lang= self.context.get('lang')
+        return getattr(obj, f'profession_{lang}', obj.profession)
+
+class ProgramSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    profession = serializers.SerializerMethodField()
+    duration = serializers.SerializerMethodField()
+
+
+    class Meta:
+        model = Program
+        fields = 'name, description, profession, duration, id'
+
+    def get_name(self, obj):
+        lang= self.context.get('lang')
+        return getattr(obj, f'name_{lang}', obj.name)
+    def get_description(self, obj):
+        lang= self.context.get('lang')
+        return getattr(obj, f'description_{lang}', obj.description)
+    def get_duration(self, obj):
+        lang= self.context.get('lang')
+        return getattr(obj, f'duration_{lang}', obj.duration)
+
+    def get_profession(self, obj):
+        lang= self.context.get('lang')
+        return getattr(obj, f'profession_{lang}', obj.profession)
+
+    
+
+class AsNumbersSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = AsNumbers
+        fields = "__all__"
+
+    def get_title(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return getattr(obj, f'title_{lang}', obj.title_ru)
+    
+    def get_description(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return getattr(obj, f'description_{lang}', obj.description_ru)
+
+class DetailStatisticsSerializer(serializers.ModelSerializer):
+    description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = DetailStatistics
+        fields = "__all__"
+
+    def get_description(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return getattr(obj, f'description_{lang}', obj.description_ru)
+    
+
+class ResourceSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    features = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Resource
+        fields ="__all__"
+
+    def get_name(self, obj):
+        request = self.context.get('request')
+        lang = request.GET.get('lang', 'ru') if request else 'ru'
+        return getattr(obj, f'name_{lang}', obj.name_ru)
+    def get_description(self, obj):
+        request = self.context.get('request')
+        lang = request.GET.get('lang', 'ru') if request else 'ru'
+        return getattr(obj, f'description_{lang}', obj.description_ru)
+    
+    def get_features(self, obj):
+        request = self.context.get('request')
+        lang = request.GET.get('lang', 'ru') if request else 'ru'
+        return [feature.get_name(lang) for feature in obj.features.all()]
+    

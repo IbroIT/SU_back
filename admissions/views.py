@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 
 
+
 ALLOWED_EXTENSIONS = {"pdf", "jpg", "jpeg", "png"}
 MAX_FILE_MB = 5
 MAX_TOTAL_MB = 25
@@ -177,3 +178,78 @@ Email: {g('email')}
         return JsonResponse({'status': 'ok', 'ticket': ticket})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+# views.py
+from rest_framework import viewsets
+from .models import requirement, BankRequisites
+from .serializers import RequirementSerializer, BankRequisitesSerializer
+
+class RequirementViewSet(viewsets.ModelViewSet):
+    queryset = requirement.objects.all()
+    serializer_class = RequirementSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+    
+class BankRequisitesViewSet(viewsets.ModelViewSet):
+    queryset = BankRequisites.objects.all()
+    serializer_class = BankRequisitesSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+    
+from rest_framework import generics
+from .models import Fee, Contacts, FeeForeign, RequisitiesForeign, ContactForeign
+from .serializers import FeeSerializer, ContactsSerializer, FeeForeignSerializer, RequisitiesForeignSerializer, ContactForeignSerializer
+
+class FeeListView(generics.ListAPIView):
+    queryset = Fee.objects.all()
+    serializer_class = FeeSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+class ContactsListView(generics.ListAPIView):
+    queryset = Contacts.objects.all()
+    serializer_class = ContactsSerializer
+
+class FeeForeignListView(generics.ListAPIView):
+    queryset = FeeForeign.objects.all()
+    serializer_class = FeeForeignSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+class RequisitiesForeignListView(generics.ListAPIView):
+    queryset = RequisitiesForeign.objects.all()
+    serializer_class = RequisitiesForeignSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+class ContactForeignListView(generics.ListAPIView):
+    queryset = ContactForeign.objects.all()
+    serializer_class = ContactForeignSerializer
+
+from .models import FAQ
+from .serializers import FAQSerializer
+
+class FAQListView(generics.ListAPIView):
+    queryset = FAQ.objects.all()
+    serializer_class = FAQSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context

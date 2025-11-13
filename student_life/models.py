@@ -702,58 +702,6 @@ class PhotoAlbum(models.Model):
         return self.photos.filter(is_active=True).count()
 
 
-class Photo(models.Model):
-    """Фотографии в альбомах"""
-    album = models.ForeignKey(
-        PhotoAlbum,
-        on_delete=models.CASCADE,
-        related_name='photos',
-        verbose_name=_('Альбом')
-    )
-    
-    # Мультиязычные поля
-    title_ru = models.CharField('Название фото (русский)', max_length=255, blank=True)
-    title_kg = models.CharField('Название фото (кыргызский)', max_length=255, blank=True)
-    title_en = models.CharField('Название фото (английский)', max_length=255, blank=True)
-    
-    description_ru = models.TextField('Описание (русский)', blank=True)
-    description_kg = models.TextField('Описание (кыргызский)', blank=True)
-    description_en = models.TextField('Описание (английский)', blank=True)
-    
-    # Файл изображения
-    image = models.ImageField(
-        upload_to='photos/',
-        verbose_name=_('Изображение'),
-        blank=True,
-        null=True
-    )
-    
-    # URL изображения (для внешних ссылок)
-    url = models.URLField(
-        verbose_name=_('URL изображения'),
-        blank=True,
-        null=True,
-        help_text='Ссылка на внешнее изображение (альтернатива загрузке файла)'
-    )
-    
-    # Теги для поиска
-    tags_ru = models.TextField('Теги (русский)', help_text='Разделяйте запятыми', blank=True)
-    tags_kg = models.TextField('Теги (кыргызский)', help_text='Разделяйте запятыми', blank=True)
-    tags_en = models.TextField('Теги (английский)', help_text='Разделяйте запятыми', blank=True)
-    
-    # Немультиязычные поля
-    photographer = models.CharField(_('Фотограф'), max_length=255, blank=True)
-    is_active = models.BooleanField(_('Активно'), default=True)
-    order = models.PositiveIntegerField(_('Порядок'), default=0)
-    uploaded_at = models.DateTimeField(_('Дата загрузки'), auto_now_add=True)
-
-    class Meta:
-        verbose_name = _('Фотография')
-        verbose_name_plural = _('Фотографии')
-        ordering = ['order', '-uploaded_at']
-
-    def __str__(self):
-        return f"{self.album.title_ru} - {self.title_ru or f'Фото {self.id}'}"
 
 
 class VideoContent(models.Model):
@@ -976,3 +924,40 @@ class EResourceFeature(models.Model):
 
     def __str__(self):
         return f"{self.resource.title_ru} - {self.text_ru}"
+
+
+class Photo(models.Model):
+    category_ru = models.CharField(max_length=255, verbose_name='Категория(ru)')
+    category_kg = models.CharField(max_length=255, verbose_name='Категория(kg)')
+    category_en = models.CharField(max_length=255, verbose_name='Категория(en)')
+    description_ru = models.CharField(max_length=255, verbose_name='Описание(ru)')
+    description_kg = models.CharField(max_length=255, verbose_name='Описание(kg)')
+    description_en = models.CharField(max_length=255, verbose_name='Описание(en)')
+    photo = models.ImageField(upload_to='student_life/photos/', verbose_name='Фото')
+
+    class Meta:
+        verbose_name = 'Фото студенческой жизни'
+        verbose_name_plural = 'Фото студенческой жизни'
+    def __str__(self):
+        return f"{self.category_ru} - {self.description_ru}"
+    def get_category(self, lang='ru'):
+        return getattr(self, f'category_{lang}', self.category_ru)
+    def get_description(self, lang='ru'):
+        return getattr(self, f'description_{lang}', self.description_ru)
+
+
+
+    
+
+class InstructionFiles(models.Model):
+    title_ru = models.CharField(max_length=255, verbose_name='название файла(ru)')
+    title_kg = models.CharField(max_length=255, verbose_name='название файла(kg)')
+    title_en = models.CharField(max_length=255, verbose_name='название файла(en)')
+    file = models.FileField(upload_to='student_life/instruction_files/', verbose_name='файл')
+
+    class Meta:
+        verbose_name = "Файл инструкции"
+        verbose_name_plural = "Файлы инструкций"
+    
+    def __str__(self):
+        return self.title_ru

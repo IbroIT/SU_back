@@ -4,8 +4,28 @@ from .models import (
     PhotoAlbum, Photo, VideoContent, StudentLifeStatistic,
     InternshipRequirement, InternshipRequirementItem, ReportTemplate,
     StudentGuide, GuideRequirement, GuideStep, GuideStepDetail,
-    EResourceCategory, EResource, EResourceFeature
+    EResourceCategory, EResource, EResourceFeature, Photo
 )
+
+
+
+
+class Photoserializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Photo
+        fields = "__all__"
+
+    def get_category(self, obj):
+        request = self.context.get('request')
+        lang = request.GET.get('lang', 'ru') if request else 'ru'
+        return getattr(obj, f'category_{lang}', obj.category_ru)
+    def get_description(self, obj):
+        request = self.context.get('request')
+        lang = request.GET.get('lang', 'ru') if request else 'ru'
+        return getattr(obj, f'description_{lang}', obj.description_ru)
 
 
 class OrganizationSpecializationSerializer(serializers.ModelSerializer):
@@ -406,3 +426,24 @@ class EResourceSerializer(serializers.ModelSerializer):
             'category', 'category_data', 'features',
             'created_at', 'updated_at'
         ]
+
+from .models import InstructionFiles
+
+class InstructionFilesSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+    file_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = InstructionFiles
+        fields = ['id', 'title', 'file_url']
+
+    def get_title(self, obj):
+        request = self.context.get('request')
+        lang = request.query_params.get('lang', 'ru') if request else 'ru'
+        return getattr(obj, f'title_{lang}', obj.title_ru)
+
+    def get_file_url(self, obj):
+        request = self.context.get('request')
+        if obj.file and hasattr(obj.file, 'url'):
+            return request.build_absolute_uri(obj.file.url) if request else obj.file.url
+        return None

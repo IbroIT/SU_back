@@ -1,6 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
+    AsNumbersViewSet,
+    DetailStatisticsViewSet,
     FacultyViewSet, 
     AccreditationViewSet,
     LeadershipViewSet,
@@ -11,7 +13,10 @@ from .views import (
     QualityProcessViewSet,
     QualityStatisticViewSet,
     QualityAdvantageViewSet,
-    QualitySettingsView
+    QualitySettingsView,
+    ProgramViewSet,
+    ProgramDetailView,
+    ResourceListView
 )
 
 router = DefaultRouter()
@@ -33,4 +38,9 @@ urlpatterns = [
     path('hsm/quality/system/', QualityManagementSystemView.as_view(), name='hsm-quality-system'),
     # Настройки системы качества
     path('hsm/quality/settings/', QualitySettingsView.as_view(), name='hsm-quality-settings'),
+    path( 'hsm/programs/', ProgramViewSet.as_view(), name='hsm-programs' ),
+    path( 'hsm/programs/<int:pk>/', ProgramDetailView.as_view(), name='hsm-program-detail' ),
+    path('hsm/as-numbers/', AsNumbersViewSet.as_view(), name='hsm-as-numbers'),
+    path('hsm/detail-statistics/', DetailStatisticsViewSet.as_view(), name='hsm-detail-statistics'),
+    path('hsm/e-resources/',ResourceListView.as_view(), name='resource_list'),
 ]

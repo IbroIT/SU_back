@@ -5,9 +5,10 @@ from rest_framework.views import APIView
 from django.db.models import Q
 from django.http import Http404
 from .models import (
-    Faculty, Accreditation, Leadership,
+    AsNumbers, Faculty, Accreditation, Leadership,
     QualityPrinciple, QualityDocument, QualityProcessGroup,
-    QualityProcess, QualityStatistic, QualityAdvantage, QualitySettings
+    QualityProcess, QualityStatistic, QualityAdvantage, QualitySettings, Program,
+    DetailStatistics, Resource,
 )
 from .serializers import (
     FacultySerializer, 
@@ -21,9 +22,23 @@ from .serializers import (
     QualityStatisticSerializer,
     QualityAdvantageSerializer,
     QualitySettingsSerializer,
-    QualityManagementSystemSerializer
+    QualityManagementSystemSerializer,
+    ProgramSerializer, 
+    ProgramDetailSerializer,
+    DetailStatisticsSerializer,
+    AsNumbersSerializer,
+    ResourceSerializer,
 )
 
+class AsNumbersViewSet(generics.ListAPIView):
+    """API для чисел и фактов ВШМ"""
+    queryset = AsNumbers.objects.all().order_by('id') 
+    serializer_class = AsNumbersSerializer
+
+class DetailStatisticsViewSet(generics.ListAPIView):
+    """API для детальной статистики ВШМ"""
+    queryset = DetailStatistics.objects.all().order_by('id')
+    serializer_class = DetailStatisticsSerializer
 
 class QualityManagementSystemView(APIView):
     """API для получения всех данных системы менеджмента качества"""
@@ -385,3 +400,26 @@ class AccreditationViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(result)
 
 
+class ProgramViewSet(generics.ListAPIView):
+    """API для образовательных программ ВШМ"""
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
+        return context
+
+class ProgramDetailView(generics.RetrieveAPIView):
+    """API для детальной информации об образовательной программе ВШМ"""
+    queryset = Program.objects.all()
+    serializer_class = ProgramDetailSerializer
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
+        return context
+    
+class ResourceListView(generics.ListAPIView):
+    serializer_class = ResourceSerializer
+    queryset= Resource.objects.all()
