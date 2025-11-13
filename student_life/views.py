@@ -18,17 +18,17 @@ from .models import (
 )
 from .serializers import (
     PartnerOrganizationSerializer, StudentAppealSerializer,
-    PhotoAlbumSerializer, PhotoSerializer, VideoContentSerializer,
+    PhotoAlbumSerializer, Photoserializer, VideoContentSerializer,
     StudentLifeStatisticSerializer, InternshipRequirementSerializer,
     ReportTemplateSerializer, StudentGuideSerializer,
-    EResourceCategorySerializer, EResourceSerializer, PhotoSerializer
+    EResourceCategorySerializer, EResourceSerializer
 )
 
 
 
 class PhotoListView(generics.ListAPIView):
-    serializer_class = PhotoSerializer
-    queryset= Photo.objects.all()
+    serializer_class = Photoserializer
+    queryset = Photo.objects.all()
 
 class PartnerOrganizationViewSet(viewsets.ModelViewSet):
     queryset = PartnerOrganization.objects.filter(is_active=True)
@@ -53,14 +53,14 @@ class PhotoAlbumViewSet(viewsets.ModelViewSet):
         """Получить все фотографии альбома"""
         album = self.get_object()
         photos = album.photos.filter(is_active=True)
-        serializer = PhotoSerializer(photos, many=True, context={'request': request})
+        serializer = Photoserializer(photos, many=True, context={'request': request})
         return Response(serializer.data)
 
 
 class PhotoViewSet(viewsets.ModelViewSet):
     """ViewSet для фотографий"""
     queryset = Photo.objects.all()
-    serializer_class = PhotoSerializer
+    serializer_class = Photoserializer
     permission_classes = [AllowAny]
 
     def get_serializer_context(self):
@@ -565,7 +565,7 @@ def gallery_data(request):
         
         # Сериализация данных
         albums_serializer = PhotoAlbumSerializer(albums, many=True, context={'request': request})
-        photos_serializer = PhotoSerializer(photos, many=True, context={'request': request})
+        photos_serializer = Photoserializer(photos, many=True, context={'request': request})
         
         # Формируем структуру данных, совместимую с фронтендом
         albums_data = []
@@ -619,8 +619,8 @@ def life_overview_data(request):
     """API endpoint для данных обзора студенческой жизни"""
     try:
         # Получаем фотографии для коллажа (последние 12)
-        recent_photos = Photo.objects.filter(is_active=True).order_by('-uploaded_at')[:12]
-        photos_serializer = PhotoSerializer(recent_photos, many=True, context={'request': request})
+        recent_photos = Photo.objects.all()[:12]
+        photos_serializer = Photoserializer(recent_photos, many=True, context={'request': request})
         
         # Получаем видео (рекомендуемые или последние)
         featured_videos = VideoContent.objects.filter(is_active=True, is_featured=True)[:3]

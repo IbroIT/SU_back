@@ -2,9 +2,14 @@ from django.contrib import admin
 from .models import (
     Faculty, Accreditation, Leadership,
     QualityPrinciple, QualityDocument, QualityProcessGroup,
-    QualityProcess, QualityStatistic, QualityAdvantage, QualitySettings
+    QualityProcess, QualityStatistic, QualityAdvantage, QualitySettings, Program,
+    AsNumbers, DetailStatistics, Resource
 )
 
+admin.site.register(Program)
+admin.site.register(AsNumbers)
+admin.site.register(DetailStatistics)
+admin.site.register(Resource)
 
 @admin.register(QualityPrinciple)
 class QualityPrincipleAdmin(admin.ModelAdmin):
