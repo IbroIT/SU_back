@@ -16,7 +16,15 @@ class Numbers(models.Model):
         return self.number + " - " + self.description_en
     
     def get_description(self, lang):
-        return getattr(self, f'description_{lang}', self.description_en)
+        # Поддержка кыргызского языка для 'kg' и 'ky'
+        if lang in ['kg', 'ky']:
+            return self.description_kg
+        if lang == 'ru':
+            return self.description_ru
+        if lang == 'en':
+            return self.description_en
+        # fallback
+        return self.description_en
     
 class Testimonials(models.Model):
     photo = models.ImageField(upload_to='testimonials/photos')

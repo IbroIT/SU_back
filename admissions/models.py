@@ -12,9 +12,14 @@ class requirement(models.Model):
         return self.title_ru
     
     def get_title(self, lang='ru'):
+        # Поддержка и 'kg', и 'ky' для кыргызского
+        if lang == 'ky':
+            lang = 'kg'
         return getattr(self, f'title_{lang}', self.title_ru)
     
     def get_description(self, lang='ru'):
+        if lang == 'ky':
+            lang = 'kg'
         return getattr(self, f'description_{lang}', self.description_ru)
     
 

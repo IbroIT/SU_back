@@ -407,7 +407,16 @@ class ProgramViewSet(generics.ListAPIView):
     
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context.update({'request': self.request})
+        # Получаем язык из заголовка Accept-Language или query-параметра lang
+        lang = self.request.query_params.get('lang')
+        if not lang:
+            lang = self.request.headers.get('Accept-Language', 'ru')[:2]
+        # Приводим ky -> kg
+        if lang == 'ky':
+            lang = 'kg'
+        if lang not in ['ru', 'en', 'kg']:
+            lang = 'ru'
+        context.update({'request': self.request, 'lang': lang})
         return context
 
 class ProgramDetailView(generics.RetrieveAPIView):
