@@ -4,7 +4,7 @@ from .models import (
     InternshipRequirement, InternshipRequirementItem, ReportTemplate,
     StudentGuide, GuideRequirement, GuideStep, GuideStepDetail,
     StudentAppeal, PhotoAlbum, Photo, VideoContent, StudentLifeStatistic,
-    EResourceCategory, EResource, EResourceFeature, InstructionFiles
+    EResourceCategory, EResource, EResourceFeature, InstructionFiles, Exchange
 )
 
 
