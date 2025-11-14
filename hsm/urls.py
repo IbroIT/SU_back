@@ -4,7 +4,6 @@ from .views import (
     AsNumbersViewSet,
     DetailStatisticsViewSet,
     FacultyViewSet, 
-    AccreditationViewSet,
     LeadershipViewSet,
     QualityManagementSystemView,
     QualityPrincipleViewSet,
@@ -21,7 +20,6 @@ from .views import (
 
 router = DefaultRouter()
 router.register(r'faculty', FacultyViewSet, basename='hsm-faculty')
-router.register(r'accreditations', AccreditationViewSet, basename='hsm-accreditations')
 router.register(r'leadership', LeadershipViewSet, basename='hsm-leadership')
 
 # Quality Management System routes

@@ -288,34 +288,3 @@ class FacultyAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Accreditation)
-class AccreditationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'organization', 'accreditation_type', 'issue_date', 'expiry_date', 'is_valid', 'is_active']
-    list_filter = ['accreditation_type', 'is_active', 'issue_date', 'expiry_date']
-    search_fields = ['name', 'name_kg', 'name_en', 'organization', 'certificate_number']
-    list_editable = ['is_active']
-    readonly_fields = ['created_at', 'updated_at', 'is_valid']
-    date_hierarchy = 'issue_date'
-    
-    fieldsets = (
-        ('Основная информация', {
-            'fields': ('name', 'name_kg', 'name_en', 'accreditation_type')
-        }),
-        ('Организация', {
-            'fields': ('organization', 'organization_kg', 'organization_en', 'organization_logo')
-        }),
-        ('Описание', {
-            'fields': ('description', 'description_kg', 'description_en'),
-            'classes': ('collapse',)
-        }),
-        ('Сертификат', {
-            'fields': ('certificate_image', 'certificate_number', 'issue_date', 'expiry_date')
-        }),
-        ('Настройки', {
-            'fields': ('is_active', 'order')
-        }),
-        ('Метаданные', {
-            'fields': ('created_at', 'updated_at', 'is_valid'),
-            'classes': ('collapse',)
-        })
-    )

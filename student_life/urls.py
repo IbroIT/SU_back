@@ -1,35 +1,7 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import (
-    PartnerOrganizationViewSet, StudentAppealViewSet,
-    PhotoAlbumViewSet, PhotoViewSet, VideoContentViewSet, StudentLifeStatisticViewSet,
-    EResourceCategoryViewSet, EResourceViewSet,PhotoListView, ExchangeListView,
-    internships_data, academic_mobility_data, regulations_data, instructions_data,
-    gallery_data, life_overview_data, download_file
-)
+from django.urls import path
 from . import views
 
-router = DefaultRouter()
-router.register(r'partner-organizations', PartnerOrganizationViewSet)
-router.register(r'student-appeals', StudentAppealViewSet)
-router.register(r'photo-albums', PhotoAlbumViewSet)
-router.register(r'photos', PhotoViewSet)
-router.register(r'videos', VideoContentViewSet)
-router.register(r'statistics', StudentLifeStatisticViewSet)
-
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('exchange-programs/', ExchangeListView.as_view(), name='exchange-programs-list'),
     path('instruction-files/', views.InstructionFilesListView.as_view(), name='instruction-files-list'),
-    # Комбинированные endpoints для фронтенда
-    path('api/data/internships_data/', internships_data, name='internships_data'),
-    path('api/data/academic_mobility_data/', academic_mobility_data, name='academic_mobility_data'),
-    path('api/data/regulations_data/', regulations_data, name='regulations_data'),
-    path('api/data/instructions_data/', instructions_data, name='instructions_data'),
-    # Новые endpoints для галереи и обзора студенческой жизни
-    path('api/data/gallery_data/', gallery_data, name='gallery_data'),
-    path('api/data/life_overview_data/', life_overview_data, name='life_overview_data'),
-    # Endpoint для скачивания файлов
-    path('api/download/<int:file_id>/', download_file, name='download_file'),
-    path('api/photos/', PhotoListView.as_view(), name='photo_list'),
+    path('api/photos/', views.PhotoListView.as_view(), name='photo_list'),
 ]
