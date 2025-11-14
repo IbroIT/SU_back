@@ -4,8 +4,33 @@ from .models import (
     PhotoAlbum, Photo, VideoContent, StudentLifeStatistic,
     InternshipRequirement, InternshipRequirementItem, ReportTemplate,
     StudentGuide, GuideRequirement, GuideStep, GuideStepDetail,
-    EResourceCategory, EResource, EResourceFeature, Photo
+    EResourceCategory, EResource, EResourceFeature, Photo, Exchange
+
 )
+
+class ExchangeSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    features = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Exchange
+        fields = ['id', 'title', 'description', 'features']
+    
+    def get_title(self, obj):
+        request = self.context.get('request')
+        lang = request.query_params.get('lang', 'ru') if request else 'ru'
+        return obj.get_title(lang)
+    
+    def get_description(self, obj):
+        request = self.context.get('request')
+        lang = request.query_params.get('lang', 'ru') if request else 'ru'
+        return obj.get_description(lang)
+    
+    def get_features(self, obj):
+        request = self.context.get('request')
+        lang = request.query_params.get('lang', 'ru') if request else 'ru'
+        return obj.get_features(lang)
 
 
 

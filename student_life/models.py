@@ -961,3 +961,27 @@ class InstructionFiles(models.Model):
     
     def __str__(self):
         return self.title_ru
+
+
+class Exchange(models.Model):
+    title_ru = models.CharField(max_length=255, verbose_name='название файла(ru)')
+    title_kg = models.CharField(max_length=255, verbose_name='название файла(kg)')
+    title_en = models.CharField(max_length=255, verbose_name='название файла(en)')
+    description_ru = models.CharField(max_length=255, verbose_name='Описание(ru)')
+    description_kg = models.CharField(max_length=255, verbose_name='Описание(kg)')
+    description_en = models.CharField(max_length=255, verbose_name='Описание(en)')
+    features_ru = models.JSONField(verbose_name='особенности(ru)', default=list)
+    features_kg = models.JSONField(verbose_name='особенности(kg)', default=list)
+    features_en = models.JSONField(verbose_name='особенности(en)', default=list)
+
+    class Meta:
+        verbose_name = "Обмен"
+        verbose_name_plural = "Обмены"
+    
+    def get_title(self, lang='ru'):
+        return getattr(self, f'title_{lang}', self.title_ru)
+
+    def get_description(self, lang='ru'):
+        return getattr(self, f'description_{lang}', self.description_ru)
+    def get_features(self, lang='ru'):
+        return getattr(self, f'features_{lang}', self.features_ru)

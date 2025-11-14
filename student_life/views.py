@@ -14,16 +14,24 @@ from .models import (
     PartnerOrganization, StudentAppeal, PhotoAlbum, Photo, 
     VideoContent, StudentLifeStatistic, InternshipRequirement, ReportTemplate,
     StudentGuide, GuideRequirement, GuideStep, GuideStepDetail,
-    EResourceCategory, EResource, EResourceFeature, Photo
+    EResourceCategory, EResource, EResourceFeature, Photo, Exchange
 )
 from .serializers import (
     PartnerOrganizationSerializer, StudentAppealSerializer,
     PhotoAlbumSerializer, Photoserializer, VideoContentSerializer,
     StudentLifeStatisticSerializer, InternshipRequirementSerializer,
     ReportTemplateSerializer, StudentGuideSerializer,
-    EResourceCategorySerializer, EResourceSerializer
+    EResourceCategorySerializer, EResourceSerializer, ExchangeSerialzer
 )
 
+class ExchangeListView(generics.ListAPIView):
+    serializer_class = ExchangeSerialzer
+    queryset = Exchange.objects.all()
+
+    def get_serializer_context(self):
+            context = super().get_serializer_context()
+            context['request'] = self.request
+            return context
 
 
 class PhotoListView(generics.ListAPIView):

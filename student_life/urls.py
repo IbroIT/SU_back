@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     PartnerOrganizationViewSet, StudentAppealViewSet,
     PhotoAlbumViewSet, PhotoViewSet, VideoContentViewSet, StudentLifeStatisticViewSet,
-    EResourceCategoryViewSet, EResourceViewSet,PhotoListView,
+    EResourceCategoryViewSet, EResourceViewSet,PhotoListView, ExchangeListView,
     internships_data, academic_mobility_data, regulations_data, instructions_data,
     gallery_data, life_overview_data, download_file
 )
@@ -19,6 +19,7 @@ router.register(r'statistics', StudentLifeStatisticViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('exchange-programs/', ExchangeListView.as_view(), name='exchange-programs-list'),
     path('instruction-files/', views.InstructionFilesListView.as_view(), name='instruction-files-list'),
     # Комбинированные endpoints для фронтенда
     path('api/data/internships_data/', internships_data, name='internships_data'),
