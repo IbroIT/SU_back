@@ -4,7 +4,7 @@ from .models import (
     InternshipRequirement, InternshipRequirementItem, ReportTemplate,
     StudentGuide, GuideRequirement, GuideStep, GuideStepDetail,
     StudentAppeal, PhotoAlbum, Photo, VideoContent, StudentLifeStatistic,
-    EResourceCategory, EResource, EResourceFeature, InstructionFiles
+    EResourceCategory, EResource, EResourceFeature, InstructionFiles, Exchange
 )
 
 
@@ -51,3 +51,4 @@ admin.site.register(EResourceFeature)
 # РЕГИСТРАЦИЯ МОДЕЛЕЙ ДЛЯ ФАЙЛОВ ИНСТРУКЦИЙ
 # =============================================================================
 admin.site.register(InstructionFiles)
+admin.site.register(Exchange)

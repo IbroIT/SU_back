@@ -21,11 +21,11 @@ from .serializers import (
     PhotoAlbumSerializer, Photoserializer, VideoContentSerializer,
     StudentLifeStatisticSerializer, InternshipRequirementSerializer,
     ReportTemplateSerializer, StudentGuideSerializer,
-    EResourceCategorySerializer, EResourceSerializer, ExchangeSerialzer
+    EResourceCategorySerializer, EResourceSerializer, ExchangeSerializer
 )
 
 class ExchangeListView(generics.ListAPIView):
-    serializer_class = ExchangeSerialzer
+    serializer_class = ExchangeSerializer
     queryset = Exchange.objects.all()
 
     def get_serializer_context(self):
