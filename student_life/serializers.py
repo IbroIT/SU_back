@@ -465,6 +465,9 @@ class InstructionFilesSerializer(serializers.ModelSerializer):
     def get_title(self, obj):
         request = self.context.get('request')
         lang = request.query_params.get('lang', 'ru') if request else 'ru'
+        # Поддержка и 'kg', и 'ky' для кыргызского
+        if lang == 'ky':
+            lang = 'kg'
         return getattr(obj, f'title_{lang}', obj.title_ru)
 
     def get_file_url(self, obj):

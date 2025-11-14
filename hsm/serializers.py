@@ -268,21 +268,21 @@ class ProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        fields = 'name, description, profession, duration, id'
+        fields = ['name', 'description', 'profession', 'duration', 'id']
 
     def get_name(self, obj):
-        lang= self.context.get('lang')
-        return getattr(obj, f'name_{lang}', obj.name)
+        lang = self.context.get('lang', 'ru')
+        return getattr(obj, f'name_{lang}', obj.name_ru)
     def get_description(self, obj):
-        lang= self.context.get('lang')
-        return getattr(obj, f'description_{lang}', obj.description)
+        lang = self.context.get('lang', 'ru')
+        return getattr(obj, f'description_{lang}', obj.description_ru)
     def get_duration(self, obj):
-        lang= self.context.get('lang')
-        return getattr(obj, f'duration_{lang}', obj.duration)
+        lang = self.context.get('lang', 'ru')
+        return getattr(obj, f'duration_{lang}', obj.duration_ru)
 
     def get_profession(self, obj):
-        lang= self.context.get('lang')
-        return getattr(obj, f'profession_{lang}', obj.profession)
+        lang = self.context.get('lang', 'ru')
+        return getattr(obj, f'profession_{lang}', obj.profession_ru)
 
     
 
@@ -335,5 +335,6 @@ class ResourceSerializer(serializers.ModelSerializer):
     def get_features(self, obj):
         request = self.context.get('request')
         lang = request.GET.get('lang', 'ru') if request else 'ru'
-        return [feature.get_name(lang) for feature in obj.features.all()]
+        # Получаем массив features по языку
+        return getattr(obj, f'features_{lang}', obj.features_ru)
     
