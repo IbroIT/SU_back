@@ -9,28 +9,14 @@ from .models import (
 )
 
 class ExchangeSerializer(serializers.ModelSerializer):
-    title = serializers.SerializerMethodField()
-    description = serializers.SerializerMethodField()
-    features = serializers.SerializerMethodField()
-    
     class Meta:
         model = Exchange
-        fields = ['id', 'title', 'description', 'features']
-    
-    def get_title(self, obj):
-        request = self.context.get('request')
-        lang = request.query_params.get('lang', 'ru') if request else 'ru'
-        return obj.get_title(lang)
-    
-    def get_description(self, obj):
-        request = self.context.get('request')
-        lang = request.query_params.get('lang', 'ru') if request else 'ru'
-        return obj.get_description(lang)
-    
-    def get_features(self, obj):
-        request = self.context.get('request')
-        lang = request.query_params.get('lang', 'ru') if request else 'ru'
-        return obj.get_features(lang)
+        fields = [
+            'id',
+            'title_ru', 'title_kg', 'title_en',
+            'description_ru', 'description_kg', 'description_en',
+            'features_ru', 'features_kg', 'features_en'
+        ]
 
 
 

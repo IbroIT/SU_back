@@ -13,3 +13,4 @@ from .models import (
 
 admin.site.register(Photo)
 admin.site.register(InstructionFiles)
+admin.site.register(Exchange)
