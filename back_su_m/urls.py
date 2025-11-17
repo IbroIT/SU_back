@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/', include('hsm.urls')),  # HSM API endpoints
     path('api/about-section/', include('about_section.urls')),  # About Section and Partners API endpoints
     path('api/home/', include('home.urls')),  # Home API endpoints
+    path('api/schedule/', include('schedule.urls')),  # Schedule subsections API
 ]
 
 # Serve media files during development
