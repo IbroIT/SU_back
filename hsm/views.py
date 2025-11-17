@@ -97,7 +97,27 @@ class QualityDocumentViewSet(viewsets.ReadOnlyModelViewSet):
             
         return queryset
     
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+
+class QualityDocumentViewSet(viewsets.ReadOnlyModelViewSet):
+    """API для документов качества"""
+    queryset = QualityDocument.objects.filter(is_active=True).order_by('category', 'order')
+    serializer_class = QualityDocumentSerializer
+    permission_classes = [AllowAny]
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category = self.request.query_params.get('category', None)
+        
+        if category:
+            queryset = queryset.filter(category=category)
+            
+        return queryset
+    
     @action(detail=True, methods=['post'])
+    @method_decorator(csrf_exempt)
     def download(self, request, pk=None):
         """Увеличить счетчик скачиваний документа"""
         try:
