@@ -79,10 +79,14 @@ class QualityPrincipleViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QualityPrincipleSerializer
 
 
+from rest_framework.permissions import AllowAny
+
+
 class QualityDocumentViewSet(viewsets.ReadOnlyModelViewSet):
     """API для документов качества"""
     queryset = QualityDocument.objects.filter(is_active=True).order_by('category', 'order')
     serializer_class = QualityDocumentSerializer
+    permission_classes = [AllowAny]
     
     def get_queryset(self):
         queryset = super().get_queryset()
